@@ -79,15 +79,15 @@ function App() {
                         <h2>Register</h2>
                         <div className="mb-3">
                             <label for="login" className="form-label">Your name</label>
-                            <input type="text" className="form-control" id="login"/>
+                            <input onInput={(e)=>setUser({...user, login: e.target.value})} type="text" className="form-control" id="login"/>
                         </div>
                         <div className="mb-3">
                             <label for="InputEmail2" className="form-label">Email address</label>
-                            <input type="email" className="form-control" id="InputEmail2" aria-describedby="emailHelp"/>
+                            <input onInput={(e)=>setUser({...user, email: e.target.value})} type="email" className="form-control" id="InputEmail2" aria-describedby="emailHelp"/>
                         </div>
                         <div className="mb-3">
                             <label for="InputPassword1" className="form-label">Password</label>
-                            <input type="password" className="form-control" id="InputPassword1"/>
+                            <input onInput={(e)=>setUser({...user, password: e.target.value})} type="password" className="form-control" id="InputPassword1"/>
                         </div>
                         <div>
                             <label for="exampleInputPassword1" className="form-label">Role</label>
