@@ -1,16 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import http from "./http";
 
 function Users(props) {
-
     const [users, setUsers] = useState([]);
-    const token = sessionStorage.getItem('token')
     const getUsers = useCallback(() => {
-        const headers =
-            token ? { Authorization: `Bearer ${token}` } : undefined;
-        fetch("http://localhost:5000/api/users", { headers })
+        http().get('/users')
             .then((a) => a.json())
             .then((users) => setUsers(users));
-    }, [token]);
+    }, []);
 
     useEffect(() => getUsers(), [getUsers])
     return (

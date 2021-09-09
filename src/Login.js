@@ -1,73 +1,60 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import http from "./http";
 
 function Login() {
     const [isLogin, setIsLogin] = useState(false);
-    const [toggle, setToggle] = useState("Login");
-    const setToken = (token) => sessionStorage.setItem('token', token)
-    const history = useHistory()
-
-    const [user, setUser] = useState({
+    const initialUser = {
         login: "",
         email: "",
         password: "",
         role: isLogin ? "" : "user",
         check: true,
-    });
+    }
+    const [user, setUser] = useState({ ...initialUser });
+    const [toggle, setToggle] = useState("Login");
+    const setToken = token => sessionStorage.setItem('token', token)
+    const setId = id => sessionStorage.setItem('id', id)
+    const history = useHistory()
 
     const toggleForm = () => {
         toggle === "Login" ? setToggle("Registration") : setToggle("Login");
-        setUser({
-            login: "",
-            email: "",
-            password: "",
-            role: isLogin ? "" : "user",
-            check: true,
-        });
+        setUser({ ...initialUser });
     };
-    const options = (method, body, type) => {
-        const user = {};
-        Object.entries(body).reduce(
-            (a, [k, v]) => (v.length ? (user[k] = v) : user),
-            user
+    const body = () => {
+        const userParse = {};
+        Object.entries(user).reduce(
+            (a, [k, v]) => (v.length ? (userParse[k] = v) : userParse),
+            userParse
         );
-        return {
-            method,
-            headers: { "Content-Type": type },
-            body: JSON.stringify(user),
-        };
+        return userParse
     };
-    const signIn = (e) => {
+    const signIn = e => {
         e.preventDefault();
-        fetch(
-            "http://localhost:5000/api/login",
-            options("POST", user, "application/json")
-        )
-            .then((a) => a.json())
-            .then(({ token }) => {
+        http().post('/login', body())
+            .then(a => a.json())
+            .then(({ token, message, id }) => {
+                if (!token) throw new Error(message)
+                setId(id)
                 setToken(token);
                 token && history.push('/list-users')
-            });
+            }).catch(console.error);
     };
-    const register = (e) => {
+    const register = e => {
         e.preventDefault();
-        fetch(
-            "http://localhost:5000/api/register",
-            options("POST", user, "application/json")
-        )
-            .then((a) => a.json())
+        http().post('/register', body())
+            .then(a => a.json())
             .then(({ success }) => setIsLogin(success));
     };
 
-
     return (
-        <div id='app' className='col-12'>
-                <div className='form-check form-switch'>
-                    <input className='form-check-input' onChange={toggleForm} type='checkbox' id='flexSwitchCheckDefault'/>
-                    <label className='form-check-label' htmlFor='flexSwitchCheckDefault'>
-                        Text
-                    </label>
-                </div>
+        <div id='login' className='col-12'>
+            <div className='form-check form-switch'>
+                <input className='form-check-input' onChange={toggleForm} type='checkbox' id='flexSwitchCheckDefault'/>
+                <label className='form-check-label' htmlFor='flexSwitchCheckDefault'>
+                    {toggle}
+                </label>
+            </div>
             {toggle === "Login" && (
                 <form className='col-3'>
                     <h2>Login</h2>
@@ -75,13 +62,15 @@ function Login() {
                         <label htmlFor='InputEmail1' className='form-label'>
                             Email address
                         </label>
-                        <input onInput={(e) => setUser({ ...user, email: e.target.value })} type='email' className='form-control' id='InputEmail1' aria-describedby='emailHelp'/>
+                        <input onInput={(e) => setUser({ ...user, email: e.target.value })} type='email'
+                               className='form-control' id='InputEmail1' aria-describedby='emailHelp'/>
                     </div>
                     <div className='mb-3'>
                         <label htmlFor='exampleInputPassword1' className='form-label'>
                             Password
                         </label>
-                        <input onInput={(e) => setUser({ ...user, password: e.target.value })} type='password' className='form-control' id='exampleInputPassword1'/>
+                        <input onInput={(e) => setUser({ ...user, password: e.target.value })} type='password'
+                               className='form-control' id='exampleInputPassword1'/>
                     </div>
                     <div className='mb-3 form-check'>
                         <input type='checkbox' className='form-check-input' id='Check1'/>
@@ -101,19 +90,22 @@ function Login() {
                         <label htmlFor='login' className='form-label'>
                             Your name
                         </label>
-                        <input onInput={(e) => setUser({ ...user, login: e.target.value })} type='text' className='form-control' id='login'/>
+                        <input onInput={(e) => setUser({ ...user, login: e.target.value })} type='text'
+                               className='form-control' id='login'/>
                     </div>
                     <div className='mb-3'>
                         <label htmlFor='InputEmail2' className='form-label'>
                             Email address
                         </label>
-                        <input onInput={(e) => setUser({ ...user, email: e.target.value })} type='email' className='form-control' id='InputEmail2' aria-describedby='emailHelp'/>
+                        <input onInput={(e) => setUser({ ...user, email: e.target.value })} type='email'
+                               className='form-control' id='InputEmail2' aria-describedby='emailHelp'/>
                     </div>
                     <div className='mb-3'>
                         <label htmlFor='InputPassword1' className='form-label'>
                             Password
                         </label>
-                        <input onInput={(e) => setUser({ ...user, password: e.target.value })} type='password' className='form-control' id='InputPassword1'/>
+                        <input onInput={(e) => setUser({ ...user, password: e.target.value })} type='password'
+                               className='form-control' id='InputPassword1'/>
                     </div>
                     <div>
                         <label htmlFor='exampleInputPassword1' className='form-label'>

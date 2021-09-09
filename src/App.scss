@@ -1,17 +1,16 @@
 #app {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 50%;
+
 }
 .form-switch {
   position: absolute;
   left: 60%;
 }
 form {
-  margin: 0 auto;
-
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 50%;
 }
 .btn {
   width: 100%;
@@ -24,3 +23,16 @@ th, td {
   padding: 5px;
   text-align: center;
 }
+a {
+  font-size: 24px;
+  font-weight: bold;
+}
+.container {
+  .btn-success {
+    display: block;
+    width: 200px;
+    margin: 100px auto;
+
+  }
+}
+
