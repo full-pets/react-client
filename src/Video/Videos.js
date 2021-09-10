@@ -1,15 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import http from "./http";
+import http from "../http";
+import { useHistory } from "react-router-dom";
 
 function Videos(props) {
     const [videos, setVideos] = useState([]);
     const id = sessionStorage.getItem('id')
-    const video = {
-        Name: "First Video",
-        Link: "https://youtube.com",
-        Owner: id,
-        Duration: "01.22",
-        Quality: "360*640",
+    const history = useHistory()
+
+    const viewVideo = ({id, name}) => {
+        history.push(`/video/${name}`, {id})
     }
     const getVideos = useCallback(() => {
         http().get('/videos')
@@ -17,16 +16,10 @@ function Videos(props) {
             .then((videos) => setVideos(videos))
     }, []);
 
-    const createVideo = () => {
-        http().post('/videos', video)
-            .then((a) => a.json())
-            .then((videos) => setVideos(videos))
-    }
-
     useEffect(() => getVideos(), [getVideos])
+
     return (
         <div>
-            <button onClick={createVideo} className="btn btn-blue">CLICK</button>
             {videos.length && (
                 <>
                     <table>
@@ -43,10 +36,10 @@ function Videos(props) {
                         </thead>
                         <tbody>
                         {videos.map((video, i) => (
-                            <tr key={i}>
+                            <tr onClick={() => viewVideo(video)} key={i}>
                                 <td>{video.id}</td>
                                 <td>{video.name}</td>
-                                <td>{video.link}</td>
+                                <td><a href={video.link}>{video.link}</a></td>
                                 <td>{video.owner}</td>
                                 <td>{video.duration}</td>
                                 <td>{video.quality}</td>

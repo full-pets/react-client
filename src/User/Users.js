@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import http from "./http";
+import http from "../http";
 
 function Users(props) {
     const [users, setUsers] = useState([]);
