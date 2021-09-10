@@ -35,4 +35,22 @@ a {
 
   }
 }
-
+.error {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,.5);
+  z-index: 9;
+  h2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 64px;
+    z-index: 9;
+    background-color: #000;
+    padding: 10px;
+    border-radius: 15px;
+  }
+}

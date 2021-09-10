@@ -14,7 +14,6 @@ function VideoOverview(props) {
     useEffect(() => getVideo(), [getVideo])
     return (
         <div>
-
             {video &&
             <table>
                 <thead>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import http from "./http";
+import { useDispatch } from "react-redux";
 
 function Login() {
     const [isLogin, setIsLogin] = useState(false);
@@ -16,7 +17,7 @@ function Login() {
     const setToken = token => sessionStorage.setItem('token', token)
     const setId = id => sessionStorage.setItem('id', id)
     const history = useHistory()
-
+    const dispatch = useDispatch()
     const toggleForm = () => {
         toggle === "Login" ? setToggle("Registration") : setToggle("Login");
         setUser({ ...initialUser });
@@ -38,13 +39,17 @@ function Login() {
                 setId(id)
                 setToken(token);
                 token && history.push('/list-users')
-            }).catch(console.error);
+            }).catch(e => dispatch({ type: 'error', payload: e.message }));
     };
     const register = e => {
         e.preventDefault();
         http().post('/register', body())
             .then(a => a.json())
-            .then(({ success }) => setIsLogin(success));
+            .then(({ success, message }) => {
+                if (!success) throw new Error(message)
+                setIsLogin(success)
+            })
+            .catch(e => dispatch({ type: 'error', payload: e.message }));
     };
 
     return (
