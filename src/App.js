@@ -7,6 +7,7 @@ import Nav from "./Nav";
 import VideoOverview from "./Video/VideoOverview";
 import { useSelector } from "react-redux";
 import Error from "./Error";
+import VideoCreate from "./Video/VideoCreate";
 
 const routes = [
     {
@@ -24,6 +25,10 @@ const routes = [
     {
         path: "/video/:id",
         component: VideoOverview,
+    },
+    {
+        path: "/create-video",
+        component: VideoCreate,
     }
 ];
 
@@ -31,8 +36,8 @@ function App() {
     const error = useSelector(state => state.authReducer.error)
     return (
         <div id='app' className='col-12'>
-            {error?.length ? <Error message={error} /> : ''}
             <Router>
+                {error?.length ? <Error message={error} /> : ''}
                 <Nav/>
                 <div>
                     <Switch>

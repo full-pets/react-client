@@ -1,12 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import http from "../http";
+import { useDispatch } from "react-redux";
 
 function Users(props) {
+    const dispatch = useDispatch()
     const [users, setUsers] = useState([]);
     const getUsers = useCallback(() => {
         http().get('/users')
             .then((a) => a.json())
-            .then((users) => setUsers(users));
+            .then((users) => {
+                if (!Array.isArray(users)) throw new Error(users.message)
+                setUsers(users)
+            })
+            .catch(e => dispatch({ type: 'error', payload: e.message }));
     }, []);
 
     useEffect(() => getUsers(), [getUsers])

@@ -1,10 +1,12 @@
 #app {
 
 }
+
 .form-switch {
   position: absolute;
   left: 60%;
 }
+
 form {
   position: absolute;
   top: 50%;
@@ -12,21 +14,26 @@ form {
   transform: translate(-50%, -50%);
   height: 50%;
 }
+
 .btn {
   width: 100%;
 }
+
 table {
   margin: 0 auto;
 }
+
 th, td {
   border: 1px solid #ccc;
   padding: 5px;
   text-align: center;
 }
+
 a {
   font-size: 24px;
   font-weight: bold;
 }
+
 .container {
   .btn-success {
     display: block;
@@ -35,12 +42,14 @@ a {
 
   }
 }
+
 .error {
   position: fixed;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0,0,0,.5);
+  background-color: rgba(0, 0, 0, .5);
   z-index: 9;
+
   h2 {
     position: absolute;
     top: 50%;
@@ -53,4 +62,24 @@ a {
     padding: 10px;
     border-radius: 15px;
   }
+}
+
+.login {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  margin-top: 100px;
+  z-index: 9;
+  label {
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+#switch {
+  opacity: 0;
 }

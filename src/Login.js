@@ -47,16 +47,16 @@ function Login() {
             .then(a => a.json())
             .then(({ success, message }) => {
                 if (!success) throw new Error(message)
-                setIsLogin(success)
+                success && toggleForm()
             })
             .catch(e => dispatch({ type: 'error', payload: e.message }));
     };
 
     return (
         <div id='login' className='col-12'>
-            <div className='form-check form-switch'>
-                <input className='form-check-input' onChange={toggleForm} type='checkbox' id='flexSwitchCheckDefault'/>
-                <label className='form-check-label' htmlFor='flexSwitchCheckDefault'>
+            <div className='form-check login form-switch'>
+                <input className='form-check-input' onChange={toggleForm} type='checkbox' id='switch'/>
+                <label className='form-check-label' htmlFor='switch'>
                     {toggle}
                 </label>
             </div>

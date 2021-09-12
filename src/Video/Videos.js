@@ -1,19 +1,25 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import http from "../http";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 function Videos(props) {
     const [videos, setVideos] = useState([]);
     const id = sessionStorage.getItem('id')
     const history = useHistory()
+    const dispatch = useDispatch()
 
-    const viewVideo = ({id, name}) => {
-        history.push(`/video/${name}`, {id})
+    const viewVideo = ({ id, name }) => {
+        history.push(`/video/${name}`, { id })
     }
     const getVideos = useCallback(() => {
         http().get('/videos')
             .then((a) => a.json())
-            .then((videos) => setVideos(videos))
+            .then((videos) => {
+                if (!Array.isArray(videos)) throw new Error(videos.message)
+                setVideos(videos)
+            })
+            .catch(e => dispatch({ type: 'error', payload: e.message }))
     }, []);
 
     useEffect(() => getVideos(), [getVideos])
@@ -22,28 +28,26 @@ function Videos(props) {
         <div>
             {videos.length && (
                 <>
-                    <table>
+                    <table className="mt-5">
                         <thead>
                         <tr>
-                            <th>Id</th>
                             <th>Name</th>
                             <th>Link</th>
-                            <th>Owner</th>
                             <th>Duration</th>
                             <th>Quality</th>
                             <th>Created</th>
+                            <th>Owner</th>
                         </tr>
                         </thead>
                         <tbody>
                         {videos.map((video, i) => (
                             <tr onClick={() => viewVideo(video)} key={i}>
-                                <td>{video.id}</td>
                                 <td>{video.name}</td>
                                 <td><a href={video.link}>{video.link}</a></td>
-                                <td>{video.owner}</td>
                                 <td>{video.duration}</td>
                                 <td>{video.quality}</td>
-                                <td>{video.created}</td>
+                                <td>{(new Date(video.created)).toLocaleString()}</td>
+                                <td>{video.owner}</td>
                             </tr>
                         ))}
                         </tbody>
