@@ -26,6 +26,7 @@ function Videos(props) {
 
     return (
         <div>
+            <button onClick={() => history.push('/create-video')} className="btn btn-danger">New</button>
             {videos.length && (
                 <>
                     <table className="mt-5">

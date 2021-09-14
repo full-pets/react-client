@@ -8,6 +8,7 @@ import VideoOverview from "./Video/VideoOverview";
 import { useSelector } from "react-redux";
 import Error from "./Error";
 import VideoCreate from "./Video/VideoCreate";
+import SingleUser from "./User/SingleUser";
 
 const routes = [
     {
@@ -17,6 +18,10 @@ const routes = [
     {
         path: "/list-users",
         component: Users,
+    },
+    {
+        path: "/user",
+        component: SingleUser,
     },
     {
         path: "/videos",
