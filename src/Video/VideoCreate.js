@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import http from "../http";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 function VideoCreate(props) {
     const dispatch = useDispatch()
-    const history = useHistory()
     const videoDefault = {
         name: "Video",
         link: "https://youtube.com",

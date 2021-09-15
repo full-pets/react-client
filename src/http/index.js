@@ -22,6 +22,15 @@ export default function http () {
         },
         delete() {},
         put() {},
-        patch() {}
+        patch(url, body, type = 'application/json') {
+            return fetch(baseUrl + url, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': type
+                },
+                body: JSON.stringify(body)
+            })
+        }
     }
 }

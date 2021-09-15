@@ -20,7 +20,7 @@ const routes = [
         component: Users,
     },
     {
-        path: "/user",
+        path: "/user/:id",
         component: SingleUser,
     },
     {

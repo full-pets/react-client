@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import http from "../http";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 function Users(props) {
     const dispatch = useDispatch()
-    const [users, setUsers] = useState([]);
+    const history = useHistory()
+    const [users, setUsers] = useState([])
     const getUsers = useCallback(() => {
         http().get('/users')
             .then((a) => a.json())
@@ -12,9 +14,11 @@ function Users(props) {
                 if (!Array.isArray(users)) throw new Error(users.message)
                 setUsers(users)
             })
-            .catch(e => dispatch({ type: 'error', payload: e.message }));
-    }, []);
-
+            .catch(e => dispatch({ type: 'error', payload: e.message }))
+    }, [])
+    const getUser = id => {
+        history.push(`user/${id}`)
+    }
     useEffect(() => getUsers(), [getUsers])
     return (
         <div>
@@ -31,7 +35,7 @@ function Users(props) {
                         </thead>
                         <tbody>
                         {users.map((user, i) => (
-                            <tr key={i}>
+                            <tr onClick={() => getUser(user.id)} key={i}>
                                 <td>{user.id}</td>
                                 <td>{user.login}</td>
                                 <td>{user.email}</td>

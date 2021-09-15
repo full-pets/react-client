@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 
 function Videos(props) {
     const [videos, setVideos] = useState([]);
-    const id = sessionStorage.getItem('id')
+    // const id = sessionStorage.getItem('id')
     const history = useHistory()
     const dispatch = useDispatch()
 

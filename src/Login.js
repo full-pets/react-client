@@ -4,12 +4,11 @@ import http from "./http";
 import { useDispatch } from "react-redux";
 
 function Login() {
-    const [isLogin, setIsLogin] = useState(false);
     const initialUser = {
         login: "",
         email: "",
         password: "",
-        role: isLogin ? "" : "user",
+        role: "user",
         check: true,
     }
     const [user, setUser] = useState({ ...initialUser });
