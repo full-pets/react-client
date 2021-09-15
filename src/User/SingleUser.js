@@ -31,10 +31,15 @@ function SingleUser(props) {
             .then(user => setUser(user))
             .catch(e => dispatch({ type: 'error', payload: e.message }))
     }, [])
-    const updateUser = () => http().patch(`/users/${id}`, user)
-            .then((a) => a.json())
-            .then(user => setUser(user))
+    const updateUser = async () => {
+        if (file.size) {
+            await setAvatar()
+        }
+        http().patch(`/users/${id}`,
+            file.size ? { ...user, avatar: `http://localhost:5000/images/${file.name}` } : user)
+            .then(getUser)
             .catch(e => dispatch({ type: 'error', payload: e.message }))
+    }
 
     useEffect(() => getUser(), [getUser])
     return (
@@ -42,11 +47,14 @@ function SingleUser(props) {
             <div className="card col-3 m-5">
                 <label className="card-img-top">
                     <input onChange={(e) => setFile(e.target.files[0])} type="file" name="file" id="file"/>
-                    <img className="card-img-top" src={user.avatar || ''} alt="Card image cap"/>
+                    <img className="card-img-top" src={user.avatar || ''} alt="image"/>
                 </label>
                 <div className="card-body">
-                    <h5 className="card-title">{user.login}</h5>
-                    <p className="card-title">{user.email}</p>
+                    <input onInput={(e) => setUser({ ...user, login: e.target.value })} type="text"
+                           className="card-title form-control" defaultValue={user.login}/>
+                    <input onInput={(e) => setUser({ ...user, email: e.target.value })} type="text"
+                           className="card-title form-control" defaultValue={user.email}/>
+                    <input readOnly defaultValue={user.role} className="card-title form-control" type="text"/>
                     <button onClick={updateUser} className="btn btn-primary">Apply</button>
                 </div>
             </div>
