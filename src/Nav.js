@@ -19,6 +19,9 @@ function Nav(props) {
                     <li className="nav-item">
                         <Link className="nav-link" to="/videos">Videos</Link>
                     </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/video-room">Video Room</Link>
+                    </li>
                     {/*<li className="nav-item dropdown">*/}
                     {/*    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"*/}
                     {/*       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">*/}

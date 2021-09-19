@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import Error from "./Error";
 import VideoCreate from "./Video/VideoCreate";
 import SingleUser from "./User/SingleUser";
+import VideoRoom from "./Video/VideoRoom";
 
 const routes = [
     {
@@ -34,6 +35,10 @@ const routes = [
     {
         path: "/create-video",
         component: VideoCreate,
+    },
+    {
+        path: "/video-room",
+        component: VideoRoom,
     }
 ];
 
