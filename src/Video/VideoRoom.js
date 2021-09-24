@@ -9,7 +9,16 @@ function VideoRoom(props) {
         onCameraFail = function (e) {
             console.log('Camera did not work.', e)
         };
+     const startCapture = async (displayMediaOptions) => {
+        let captureStream = null;
 
+        try {
+            captureStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+        } catch(err) {
+            console.error("Error: " + err);
+        }
+        return captureStream;
+    }
     const saver = () => {
         let blob = recorder.getBlob()
         // invokeSaveAsDialog(blob)
@@ -25,11 +34,19 @@ function VideoRoom(props) {
             .catch(console.log)
     }
     useEffect(() => {
+        //<<<<<<<<<<<<<<< CAPTURE OF WEBCAMERA >>>>>>>>>>>>>>>>>>>
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
         navigator.getUserMedia({ video: true, audio: true }, function (stream) {
             video.current.srcObject = stream
             setRecorder(RecordRTC(stream, { type: 'video', mimeType: 'video/mpeg' }))
         }, onCameraFail)
+
+
+//<<<<<<<<<<<<<<< CAPTURE OF SCREEN >>>>>>>>>>>>>>>>>>>
+        // startCapture().then(stream =>{
+        //     video.current.srcObject = stream
+        //     setRecorder(RecordRTC(stream, { type: 'video', mimeType: 'video/mpeg' }))
+        // } )
     }, [])
 
     return (
