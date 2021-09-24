@@ -9,12 +9,12 @@ function VideoRoom(props) {
         onCameraFail = function (e) {
             console.log('Camera did not work.', e)
         };
-     const startCapture = async (displayMediaOptions) => {
+    const startCapture = async (displayMediaOptions) => {
         let captureStream = null;
 
         try {
             captureStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-        } catch(err) {
+        } catch (err) {
             console.error("Error: " + err);
         }
         return captureStream;
@@ -33,27 +33,28 @@ function VideoRoom(props) {
             .then(console.log)
             .catch(console.log)
     }
-    useEffect(() => {
-        //<<<<<<<<<<<<<<< CAPTURE OF WEBCAMERA >>>>>>>>>>>>>>>>>>>
+    const setCamera = () => {
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
         navigator.getUserMedia({ video: true, audio: true }, function (stream) {
             video.current.srcObject = stream
             setRecorder(RecordRTC(stream, { type: 'video', mimeType: 'video/mpeg' }))
         }, onCameraFail)
-
-
-//<<<<<<<<<<<<<<< CAPTURE OF SCREEN >>>>>>>>>>>>>>>>>>>
-        // startCapture().then(stream =>{
-        //     video.current.srcObject = stream
-        //     setRecorder(RecordRTC(stream, { type: 'video', mimeType: 'video/mpeg' }))
-        // } )
-    }, [])
-
+    }
+    const setScreen = () => {
+        startCapture().then(stream => {
+            video.current.srcObject = stream
+            setRecorder(RecordRTC(stream, { type: 'video', mimeType: 'video/mpeg' }))
+        })
+    }
     return (
         <div>
             <video ref={video} autoPlay id="vid"/>
             <button onClick={() => recorder.startRecording()}>Start</button>
             <button onClick={() => recorder.stopRecording(saver)}>Stop</button>
+            <div className="col-3 ml-auto">
+                <button onClick={setCamera} className=" m-1 btn btn-info">Camera</button>
+                <button onClick={setScreen} className=" m-1 btn btn-info">Screen</button>
+            </div>
         </div>
     )
 }
