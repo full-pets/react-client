@@ -20,7 +20,7 @@ function Videos(props) {
                 setVideos(videos)
             })
             .catch(e => dispatch({ type: 'error', payload: e.message }))
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => getVideos(), [getVideos])
 

@@ -14,7 +14,7 @@ function VideoOverview(props) {
                 setVideo(video)
             })
             .catch(e => dispatch({ type: 'error', payload: e.message }))
-    }, [id]);
+    }, [id, dispatch]);
 
     useEffect(() => getVideo(), [getVideo])
     return (
@@ -46,4 +46,4 @@ function VideoOverview(props) {
     );
 }
 
-export default VideoOverview;
+export default VideoOverview

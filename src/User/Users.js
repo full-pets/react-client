@@ -15,7 +15,7 @@ function Users(props) {
                 setUsers(users)
             })
             .catch(e => dispatch({ type: 'error', payload: e.message }))
-    }, [])
+    }, [dispatch])
     const getUser = id => {
         history.push(`user/${id}`)
     }

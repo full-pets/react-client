@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import http from "../http";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 function VideoCreate(props) {
     const dispatch = useDispatch()
+    const history = useHistory()
     const videoDefault = {
         name: "Video",
         link: "https://youtube.com",
@@ -17,7 +19,7 @@ function VideoCreate(props) {
         e.preventDefault()
         http().post('/videos', video)
             .then((a) => a.json())
-            .then((videos) => console.log(videos))
+            .then(({ success }) => success && history.push('/videos'))
             .catch(e => dispatch({ type: 'error', payload: e.message }))
     }
     return (

@@ -1,34 +1,62 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import RecordRTC, { invokeSaveAsDialog } from 'recordrtc'//https://recordrtc.org/Тут читать АПИ
 
 function VideoRoom(props) {
+    const [recorder, setRecorder] = useState(null)
+
+    //Делаем реф HTMLVideo, чтоб потом направлять туда стрим с вебки
     let video = useRef(null),
-        canvas = useRef(null),
-        localMediaStream = null,
         onCameraFail = function (e) {
-            console.log('Camera did not work.', e);
+            console.log('Camera did not work.', e)
         };
+    const startCapture = async (displayMediaOptions) => {
+        let captureStream = null;
 
-    useEffect(() => {
-        console.log(1)
-        let ctx = canvas.current.getContext('2d')
-
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-        navigator.getUserMedia({ video: true }, function (stream) {
-            video.current.srcObject = stream
-            localMediaStream = stream;
-        }, onCameraFail);
-        if (localMediaStream) {
-            ctx.drawImage(video.current, 0, 0);
+        try {
+            captureStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+        } catch (err) {
+            console.error("Error: " + err);
         }
-    }, [])
-
+        return captureStream;
+    }
+    const saver = () => {
+        let blob = recorder.getBlob()
+        // invokeSaveAsDialog(blob)
+        const file = new File([blob], 'filename.webm', { type: 'video/webm' });
+        const form = new FormData()
+        form.append('file', file, file.name)
+        fetch('http://localhost:5000/api/video', {
+            headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token') },
+            method: 'POST',
+            body: form
+        })
+            .then(console.log)
+            .catch(console.log)
+    }
+    const setCamera = () => {
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        navigator.getUserMedia({ video: true, audio: true }, function (stream) {
+            video.current.srcObject = stream
+            setRecorder(RecordRTC(stream, { type: 'video', mimeType: 'video/mpeg' }))
+        }, onCameraFail)
+    }
+    const setScreen = () => {
+        startCapture().then(stream => {
+            video.current.srcObject = stream
+            setRecorder(RecordRTC(stream, { type: 'video', mimeType: 'video/mpeg' }))
+        })
+    }
     return (
         <div>
             <video ref={video} autoPlay id="vid"/>
-            <canvas ref={canvas} id="canvas" width="0" height="0"/>
-
+            <button onClick={() => recorder.startRecording()}>Start</button>
+            <button onClick={() => recorder.stopRecording(saver)}>Stop</button>
+            <div className="col-3 ml-auto">
+                <button onClick={setCamera} className=" m-1 btn btn-info">Camera</button>
+                <button onClick={setScreen} className=" m-1 btn btn-info">Screen</button>
+            </div>
         </div>
-    );
+    )
 }
 
-export default VideoRoom;
+export default VideoRoom
