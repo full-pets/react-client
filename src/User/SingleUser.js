@@ -36,7 +36,7 @@ function SingleUser(props) {
             await setAvatar()
         }
         http().patch(`/users/${id}`,
-            file.size ? { ...user, avatar: `http://localhost:5000/images/${file.name}` } : user)
+            file.size ? { ...user, avatar: `http://localhost:5000/static/${file.name}` } : user)
             .then(getUser)
             .catch(e => dispatch({ type: 'error', payload: e.message }))
     }
