@@ -30,12 +30,12 @@ function VideoRoom(props) {
         const form = new FormData()
         form.append('file', file, file.name)
         fetch('http://localhost:5000/api/video', {
-            headers: {Authorization: 'Bearer ' + sessionStorage.getItem('token')},
+            headers: {Authorization: 'Bearer ' + sessionStorage.getItem('token'), 'x-user': sessionStorage.getItem('id')},
             method: 'POST',
             body: form
         })
             .then(console.log)
-            .catch(console.log)
+            .catch(e => dispatch({type: 'error', payload: e.message}))
     }
     const setCamera = () => {
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
